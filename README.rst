@@ -21,6 +21,7 @@ The following information is provided after executing the script:
 * ``ESHOP_SOURCE_PATH`` - Full path to eShop runtime source and front
   controllers;
 * ``ESHOP_BOOTSTRAP_PATH`` - Full path to eShop ``bootstrap.php`` file;
+* ``ESHOP_CONFIG_PATH`` - Full path to eShop ``config.inc.php`` file;
 * ``ESHOP_VENDOR_PATH`` - Full path to composer's ``vendor`` directory;
 * ``ESHOP_VENDOR_BIN_PATH`` - Full path to binary files which were installed by
   defined dependencies inside ``composer.json`` file;

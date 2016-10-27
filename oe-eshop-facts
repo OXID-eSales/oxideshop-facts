@@ -12,6 +12,7 @@ function main {
 function get_input_values {
     local SOURCE_PATH_SUFFIX="../../source/"
     local BOOTSTRAP_FN="bootstrap.php"
+    local CONFIG_FN="config.inc.php"
     local VENDOR_SUFFIX="../vendor/"
     local VENDOR_BIN_SUFFIX="bin"
 
@@ -20,6 +21,7 @@ function get_input_values {
     : ${ESHOP_FACT_BASEDIR:=$(get_existing_full_path_name $(dirname "$BASH_SOURCE"))}
     : ${ESHOP_SOURCE_PATH:=$(get_existing_full_path_name "$ESHOP_FACT_BASEDIR/$SOURCE_PATH_SUFFIX")}
     : ${ESHOP_BOOTSTRAP_PATH:=$(get_existing_full_path_name "$ESHOP_SOURCE_PATH/$BOOTSTRAP_FN")}
+    : ${ESHOP_CONFIG_PATH:=$(get_existing_full_path_name "$ESHOP_SOURCE_PATH/$CONFIG_FN")}
     : ${ESHOP_VENDOR_PATH:=$(get_existing_full_path_name "$ESHOP_SOURCE_PATH/$VENDOR_SUFFIX")}
     : ${ESHOP_VENDOR_BIN_PATH:=$(get_existing_full_path_name "$ESHOP_VENDOR_PATH/$VENDOR_BIN_SUFFIX")}
     : ${ESHOP_VENDOR_NAME:=$(get_vendor_name "$BASH_SOURCE")}
@@ -36,6 +38,7 @@ function display_input_values {
         echo -e "\tESHOP_FACT_BASEDIR: $ESHOP_FACT_BASEDIR"
         echo -e "\tESHOP_SOURCE_PATH: $ESHOP_SOURCE_PATH"
         echo -e "\tESHOP_BOOTSTRAP_PATH: $ESHOP_BOOTSTRAP_PATH"
+        echo -e "\tESHOP_CONFIG_PATH: $ESHOP_CONFIG_PATH"
         echo -e "\tESHOP_VENDOR_PATH: $ESHOP_VENDOR_PATH"
         echo -e "\tESHOP_VENDOR_BIN_PATH: $ESHOP_VENDOR_BIN_PATH"
         echo -e "\tESHOP_VENDOR_NAME: $ESHOP_VENDOR_NAME"
@@ -56,6 +59,7 @@ function export_input_values {
     export ESHOP_FACT_BASEDIR="$ESHOP_FACT_BASEDIR"
     export ESHOP_SOURCE_PATH="$ESHOP_SOURCE_PATH"
     export ESHOP_BOOTSTRAP_PATH="$ESHOP_BOOTSTRAP_PATH"
+    export ESHOP_CONFIG_PATH="$ESHOP_CONFIG_PATH"
     export ESHOP_VENDOR_PATH="$ESHOP_VENDOR_PATH"
     export ESHOP_VENDOR_BIN_PATH="$ESHOP_VENDOR_BIN_PATH"
     export ESHOP_VENDOR_NAME="$ESHOP_VENDOR_NAME"
