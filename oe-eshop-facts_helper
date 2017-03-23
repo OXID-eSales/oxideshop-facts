@@ -3,7 +3,7 @@
 function get_full_path_name {
     local PARTIAL_PATH="$1"
 
-    readlink -fn "$PARTIAL_PATH"
+    echo `${ESHOP_PHP_BIN_PATH} -r "echo realpath(\"$PARTIAL_PATH\");"`
 }
 
 function get_existing_full_path_name {
@@ -22,10 +22,8 @@ function get_current_script_path {
 function get_vendor_name {
     local SOURCE="$1"
     local FULL_PATH=$(get_current_script_path "$SOURCE")
-    local LIST=($(echo $FULL_PATH | tr "/" "\n"))
-    local VENDOR_NAME=${LIST[-3]}
 
-    echo ${VENDOR_NAME:-oxid-esales}
+    echo `${ESHOP_PHP_BIN_PATH} -r "echo array_slice(explode(\"/\", \"$FULL_PATH\"), -3)[0] ?: \"oxid-esales\";"`
 }
 
 function print_variables_header {
