@@ -19,9 +19,9 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-namespace OxidEsales\ShopFacts\Edition;
+namespace OxidEsales\Facts\Edition;
 
-use OxidEsales\ShopFacts\Config\ConfigFile;
+use OxidEsales\Facts\Config\ConfigFile;
 
 /**
  * Class is responsible for returning edition of OXID eShop.

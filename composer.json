@@ -5,7 +5,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "OxidEsales\\ShopFacts\\": "./src"
+            "OxidEsales\\Facts\\": "./src"
         }
     }
 }

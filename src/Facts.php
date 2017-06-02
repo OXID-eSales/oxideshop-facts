@@ -19,17 +19,17 @@
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
-namespace OxidEsales\ShopFacts;
+namespace OxidEsales\Facts;
 
-use OxidEsales\ShopFacts\Config\ConfigFile;
-use OxidEsales\ShopFacts\Edition\EditionSelector;
+use OxidEsales\Facts\Config\ConfigFile;
+use OxidEsales\Facts\Edition\EditionSelector;
 
 /**
  * Class responsible to return information about OXID eShop.
  * Could be used without shop bootstrap
  * for example before setup of a shop.
  */
-class ShopFacts
+class Facts
 {
     public function __construct()
     {
