@@ -31,9 +31,65 @@ use OxidEsales\Facts\Edition\EditionSelector;
  */
 class Facts
 {
-    public function __construct()
+    public function __construct($startPath = __DIR__)
     {
+        $this->startPath = $startPath;
         $this->configReader = new ConfigFile();
+    }
+
+    /**
+     * @return string Root path of shop.
+     */
+    public function getShopRootPath()
+    {
+        $vendorPaths = [
+            '/vendor',
+            '/../vendor',
+            '/../../vendor',
+            '/../../../vendor',
+            '/../../../../vendor',
+        ];
+
+        $rootPath = '';
+        foreach ($vendorPaths as $vendorPath) {
+            if (file_exists(Path::join($this->startPath, $vendorPath))) {
+                $rootPath = Path::join($this->startPath, $vendorPath, '..');
+                break;
+            }
+        }
+        return $rootPath;
+    }
+
+    /**
+     * @return string Path to vendor directory.
+     */
+    public function getVendorPath()
+    {
+        return Path::join($this->getShopRootPath(), 'vendor');
+    }
+
+    /**
+     * @return string Path to source directory.
+     */
+    public function getSourcePath()
+    {
+        return Path::join($this->getShopRootPath(), 'source');
+    }
+
+    /**
+     * @return string Path to ``out`` directory.
+     */
+    public function getOutPath()
+    {
+        return Path::join($this->getSourcePath(), 'out');
+    }
+
+    /**
+     * @return string Eshop edition as capital two letters code.
+     */
+    public function getEdition()
+    {
+        return 'CE';
     }
 
     public function getDatabaseName()
