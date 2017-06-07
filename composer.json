@@ -2,10 +2,19 @@
     "name": "oxid-esales/oxideshop-facts",
     "description": "OXID eShop facts",
     "license": "GPL-3.0",
-    "require": {},
+    "require": {
+        "webmozart/path-util": "^2.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8",
+        "mikey179/vfsStream": "^1.6"
+    },
     "autoload": {
         "psr-4": {
             "OxidEsales\\Facts\\": "./src"
         }
+    },
+    "autoload-dev": {
+        "psr-4": { "OxidEsales\\DemoDataInstaller\\Tests\\": "tests/" }
     }
 }

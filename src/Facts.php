@@ -23,6 +23,7 @@ namespace OxidEsales\Facts;
 
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
+use Webmozart\PathUtil\Path;
 
 /**
  * Class responsible to return information about OXID eShop.
@@ -31,10 +32,12 @@ use OxidEsales\Facts\Edition\EditionSelector;
  */
 class Facts
 {
-    public function __construct($startPath = __DIR__)
+    public function __construct($startPath = __DIR__, $configFile = null)
     {
         $this->startPath = $startPath;
-        $this->configReader = new ConfigFile();
+        if (is_null($configFile)) {
+            $this->configReader = new ConfigFile();
+        }
     }
 
     /**
@@ -89,7 +92,9 @@ class Facts
      */
     public function getEdition()
     {
-        return 'CE';
+        $editionSelector = new EditionSelector();
+
+        return $editionSelector->getEdition();
     }
 
     public function getDatabaseName()

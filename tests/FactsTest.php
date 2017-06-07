@@ -50,13 +50,6 @@ class FactsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedSource, $facts->getSourcePath());
     }
 
-    public function testGetEditionCE()
-    {
-        $facts = new Facts();
-
-        $this->assertEquals('CE', $facts->getEdition());
-    }
-
     private function buildFacts()
     {
         $structure = [
@@ -82,7 +75,10 @@ class FactsTest extends \PHPUnit_Framework_TestCase
         $root = vfsStream::url('root');
 
         $__DIR__stub = $root . '/oxideshop_ce/vendor/oxid-esales/oxideshop-facts/src';
-        $facts = new Facts($__DIR__stub);
+
+        $configFile = $this->getMock('ConfigFile');
+
+        $facts = new Facts($__DIR__stub, $configFile);
 
         return $facts;
     }
