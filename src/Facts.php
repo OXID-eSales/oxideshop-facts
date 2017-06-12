@@ -38,6 +38,9 @@ class Facts
         if (is_null($configFile)) {
             $this->configReader = new ConfigFile();
         }
+        else {
+            $this->configReader = $configFile;
+        }
     }
 
     /**

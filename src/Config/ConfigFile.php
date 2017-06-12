@@ -39,6 +39,10 @@ class ConfigFile
      */
     public function __construct($pathToConfigIncFile = null)
     {
+        if (is_file($pathToConfigIncFile)) {
+            $this->loadVars($pathToConfigIncFile);
+            return;
+        }
         $pathToConfigIncFile = '';
         $rootPath = '';
         $pathToAutoloadFromThisScript = '/';
