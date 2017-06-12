@@ -36,11 +36,9 @@ class Facts
     {
         $this->startPath = $startPath;
         if (is_null($configFile)) {
-            $this->configReader = new ConfigFile();
+            $configFile = new ConfigFile();
         }
-        else {
-            $this->configReader = $configFile;
-        }
+        $this->configReader = $configFile;
     }
 
     /**
