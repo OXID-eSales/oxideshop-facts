@@ -37,14 +37,23 @@ class EditionSelector
     /** @var string Edition abbreviation  */
     private $edition = null;
 
+    /** @var ConfigFile */
+    private $configFile = null;
+
     /**
      * EditionSelector constructor.
+     * Adds possibility to inject ConfigFile to force different settings.
      *
-     * @param string|null                           $edition                 to force edition.
+     * @param null|ConfigFile $configFile
      */
-    public function __construct($edition = null, $virtualClassMapProvider = null)
+    public function __construct($configFile = null)
     {
-        $this->edition = $edition ?: $this->findEdition();
+        if (is_null($configFile)) {
+            $configFile = new ConfigFile();
+        }
+        $this->configFile = $configFile;
+
+        $this->edition = $this->findEdition();
     }
 
     /**
@@ -89,9 +98,7 @@ class EditionSelector
      */
     protected function findEdition()
     {
-        $configFile = new ConfigFile();
-        $edition = $configFile->getVar('edition') ?: $this->findEditionByClassMap();
-        $configFile->setVar('edition', $edition);
+        $edition = $this->configFile->getVar('edition') ?: $this->findEditionByClassMap();
 
         return strtoupper($edition);
     }

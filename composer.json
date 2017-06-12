@@ -15,6 +15,6 @@
         }
     },
     "autoload-dev": {
-        "psr-4": { "OxidEsales\\DemoDataInstaller\\Tests\\": "tests/" }
+        "psr-4": { "OxidEsales\\Facts\\Tests\\": "tests/" }
     }
 }
