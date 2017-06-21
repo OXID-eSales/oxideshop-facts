@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OXID eSales OXID eShop Facts. If not, see <http://www.gnu.org/licenses/>.
  *
- * @link      http://www.oxid-esales.com
+ * @link          http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
@@ -28,13 +28,14 @@ use OxidEsales\Facts\Config\ConfigFile;
  */
 class EditionSelector
 {
+
     const ENTERPRISE = 'EE';
 
     const PROFESSIONAL = 'PE';
 
     const COMMUNITY = 'CE';
 
-    /** @var string Edition abbreviation  */
+    /** @var string Edition abbreviation */
     private $edition = null;
 
     /** @var ConfigFile */
@@ -106,9 +107,9 @@ class EditionSelector
     protected function findEditionByClassMap()
     {
         $edition = static::COMMUNITY;
-        if (class_exists(\OxidEsales\EshopEnterprise\Core\Autoload\VirtualNameSpaceClassMap::class)) {
+        if (class_exists(\OxidEsales\EshopEnterprise\Core\Autoload\UnifiedNameSpaceClassMap::class)) {
             $edition = static::ENTERPRISE;
-        } elseif (class_exists(\OxidEsales\EshopProfessional\Core\Autoload\VirtualNameSpaceClassMap::class)) {
+        } elseif (class_exists(\OxidEsales\EshopProfessional\Core\Autoload\UnifiedNameSpaceClassMap::class)) {
             $edition = static::PROFESSIONAL;
         }
 

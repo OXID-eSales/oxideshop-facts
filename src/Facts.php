@@ -81,6 +81,21 @@ class Facts
     }
 
     /**
+     * @return string Path to source directory.
+     */
+    public function getCommunityEditionSourcePath()
+    {
+        $vendorPath = $this->getVendorPath();
+        if (is_dir(Path::join($vendorPath, 'oxideshop_ce'))) {
+            $communityEditionSourcePath = Path::join($vendorPath, 'oxideshop_ce', 'source');
+        } else {
+            $communityEditionSourcePath = $this->getSourcePath();
+        }
+        
+        return $communityEditionSourcePath;
+    }
+
+    /**
      * @return string Path to ``out`` directory.
      */
     public function getOutPath()
