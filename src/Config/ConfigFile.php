@@ -59,7 +59,7 @@ class ConfigFile
             $count++;
         }
         if (empty($pathToConfigIncFile)) {
-            throw new \Exception('File config.inc.php was not found!');
+            throw new \Exception('One of the files vendor/autoload.php or source/config.inc.php was not found!');
         }
 
         $this->setVar(static::PARAMETER_VENDOR_PATH, $rootPath.'vendor');
