@@ -32,12 +32,30 @@ use Webmozart\PathUtil\Path;
  */
 class Facts
 {
+    /**
+     * @var string The composer vendor name of the OXID eSales AG.
+     */
+    const COMPOSER_VENDOR_OXID_ESALES = 'oxid-esales';
+
+    /**
+     * @var string The composer package name of the OXID eShop Community Edition.
+     */
+    const COMPOSER_PACKAGE_OXIDESHOP_CE = 'oxideshop-ce';
+
+    /**
+     * @var null | ConfigFile
+     */
+    protected $configReader = null;
+
+    /**
+     * Facts constructor.
+     *
+     * @param string $startPath               Start path.
+     * @param null   $configFile              Optional ConfigFile
+     */
     public function __construct($startPath = __DIR__, $configFile = null)
     {
         $this->startPath = $startPath;
-        if (is_null($configFile)) {
-            $configFile = new ConfigFile();
-        }
         $this->configReader = $configFile;
     }
 
@@ -61,6 +79,7 @@ class Facts
                 break;
             }
         }
+
         return $rootPath;
     }
 
@@ -86,12 +105,13 @@ class Facts
     public function getCommunityEditionSourcePath()
     {
         $vendorPath = $this->getVendorPath();
-        if (is_dir(Path::join($vendorPath, 'oxideshop_ce'))) {
-            $communityEditionSourcePath = Path::join($vendorPath, 'oxideshop_ce', 'source');
+
+        if ($this->isProjectEshopInstallation()) {
+            $communityEditionSourcePath = Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE, 'source');
         } else {
             $communityEditionSourcePath = $this->getSourcePath();
         }
-        
+
         return $communityEditionSourcePath;
     }
 
@@ -104,38 +124,49 @@ class Facts
     }
 
     /**
+     * @throws \Exception
+     *
      * @return string Eshop edition as capital two letters code.
      */
     public function getEdition()
     {
-        $editionSelector = new EditionSelector();
+        try {
+            $editionSelector = new EditionSelector();
+            $edition = $editionSelector->getEdition();
+        } catch (\Exception $exception) {
+            if ($exception->getCode() == ConfigFile::ERROR_CODE_CONFIGFILE_NOT_FOUND) {
+                $edition = EditionSelector::findEditionByClassMap();
+            } else {
+                throw $exception;
+            }
+        }
 
-        return $editionSelector->getEdition();
+        return $edition;
     }
 
     public function getDatabaseName()
     {
-        return $this->configReader->dbName;
+        return $this->getConfigReader()->dbName;
     }
 
     public function getDatabaseUserName()
     {
-        return $this->configReader->dbUser;
+        return $this->getConfigReader()->dbUser;
     }
 
     public function getDatabasePassword()
     {
-        return $this->configReader->dbPwd;
+        return $this->getConfigReader()->dbPwd;
     }
 
     public function getDatabaseHost()
     {
-        return $this->configReader->dbHost;
+        return $this->getConfigReader()->dbHost;
     }
 
     public function getDatabaseDriver()
     {
-        return $this->configReader->dbType;
+        return $this->getConfigReader()->dbType;
     }
 
     public function getMigrationPaths()
@@ -143,22 +174,47 @@ class Facts
         $editionSelector = new EditionSelector();
 
         $migrationPaths = [
-            'ce' => $this->configReader->getVar(ConfigFile::PARAMETER_SOURCE_PATH).'/migration/migrations.yml',
+            'ce' => $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH).'/migration/migrations.yml',
         ];
 
         if ($editionSelector->isProfessional() || $editionSelector->isEnterprise()) {
-            $migrationPaths['pe'] = $this->configReader->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                                    . '/oxid-esales/oxideshop-pe/migration/migrations.yml';
+            $migrationPaths['pe'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
+                                    . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-pe/migration/migrations.yml';
         }
 
         if ($editionSelector->isEnterprise()) {
-            $migrationPaths['ee'] = $this->configReader->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                                    .'/oxid-esales/oxideshop-ee/migration/migrations.yml';
+            $migrationPaths['ee'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
+                                    .'/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-ee/migration/migrations.yml';
         }
 
-        $migrationPaths['pr'] = $this->configReader->getVar(ConfigFile::PARAMETER_SOURCE_PATH)
+        $migrationPaths['pr'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH)
                                     . '/migration/project_migrations.yml';
 
         return $migrationPaths;
+    }
+
+    /**
+     * Safeguard for ConfigFile object.
+     *
+     * @return null|ConfigFile
+     */
+    protected function getConfigReader()
+    {
+        if (is_null($this->configReader)) {
+            $this->configReader = new ConfigFile();
+        }
+        return $this->configReader;
+    }
+
+    /**
+     * Determine, if the given OXID eShop is a project installation.
+     *
+     * @return bool Is the given OXID eShop installation a poject installation?
+     */
+    private function isProjectEshopInstallation()
+    {
+        $vendorCommunityEditionPath = Path::join($this->getVendorPath(), self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE);
+
+        return is_dir($vendorCommunityEditionPath);
     }
 }

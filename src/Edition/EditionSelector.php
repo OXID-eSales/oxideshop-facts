@@ -49,9 +49,6 @@ class EditionSelector
      */
     public function __construct($configFile = null)
     {
-        if (is_null($configFile)) {
-            $configFile = new ConfigFile();
-        }
         $this->configFile = $configFile;
 
         $this->edition = $this->findEdition();
@@ -92,19 +89,11 @@ class EditionSelector
     }
 
     /**
-     * Check for forced edition in config file. If edition is not specified,
-     * determine it by ClassMap existence.
+     * Find edition by classmap only.
      *
      * @return string
      */
-    protected function findEdition()
-    {
-        $edition = $this->configFile->getVar('edition') ?: $this->findEditionByClassMap();
-
-        return strtoupper($edition);
-    }
-
-    protected function findEditionByClassMap()
+    static public function findEditionByClassMap()
     {
         $edition = static::COMMUNITY;
         if (class_exists(\OxidEsales\EshopEnterprise\Core\Autoload\UnifiedNameSpaceClassMap::class)) {
@@ -114,5 +103,31 @@ class EditionSelector
         }
 
         return $edition;
+    }
+
+    /**
+     * Check for forced edition in config file. If edition is not specified,
+     * determine it by ClassMap existence.
+     *
+     * @return string
+     */
+    protected function findEdition()
+    {
+        $edition = $this->getConfigFile()->getVar('edition') ?: self::findEditionByClassMap();
+
+        return strtoupper($edition);
+    }
+
+    /**
+     * Safeguard for ConfigFile object.
+     *
+     * @return null|ConfigFile
+     */
+    protected function getConfigFile()
+    {
+        if (is_null($this->configFile)) {
+            $this->configFile = new ConfigFile();
+        }
+        return $this->configFile;
     }
 }

@@ -26,7 +26,7 @@ use OxidEsales\Facts\Facts;
 
 class FactsTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetShopRoot()
+    public function testGetShopRootPath()
     {
         $facts = $this->buildFacts();
 
@@ -46,12 +46,37 @@ class FactsTest extends \PHPUnit_Framework_TestCase
     {
         $facts = $this->buildFacts();
 
-        $expectedSource = vfsStream::url('root/oxideshop_ce/source');
+        $expectedSource = $this->getShopSourcePath();
         $this->assertEquals($expectedSource, $facts->getSourcePath());
     }
 
-    private function buildFacts()
+    public function testGetCommunityEditionSourcePathNormalInstallation()
     {
+        $facts = $this->buildFacts();
+
+        $this->assertEquals($this->getShopSourcePath(), $facts->getCommunityEditionSourcePath());
+    }
+
+    public function testGetCommunityEditionSourcePathProjectInstallation()
+    {
+        $facts = $this->buildFacts(true);
+
+        $this->assertEquals($this->getProjectShopSourcePath(), $facts->getCommunityEditionSourcePath());
+    }
+
+    private function buildFacts($isProjectInstallation = false)
+    {
+
+        $vendorOxidesaleDirectory = [
+            'oxideshop-facts' => [
+                'bin' => [],
+                'src' => []
+            ]
+        ];
+        if ($isProjectInstallation) {
+            $vendorOxidesaleDirectory['oxideshop-ce'] = [];
+        }
+
         $structure = [
             'oxideshop_ce' => [
                 'source' => [
@@ -60,12 +85,7 @@ class FactsTest extends \PHPUnit_Framework_TestCase
                 ],
                 'vendor' => [
                     'bin' => [],
-                    'oxid-esales' => [
-                        'oxideshop-facts' => [
-                            'bin' => [],
-                            'src' => []
-                        ]
-                    ]
+                    'oxid-esales' => $vendorOxidesaleDirectory
                 ]
             ],
             'vendor' => []
@@ -81,5 +101,25 @@ class FactsTest extends \PHPUnit_Framework_TestCase
         $facts = new Facts($__DIR__stub, $configFile);
 
         return $facts;
+    }
+
+    /**
+     * Get the path to the OXID eShop source directory.
+     *
+     * @return string The path to the OXID eShop source directory.
+     */
+    private function getShopSourcePath()
+    {
+        return vfsStream::url('root/oxideshop_ce/source');
+    }
+
+    /**
+     * Get the path to the OXID eShop source directory.
+     *
+     * @return string The path to the OXID eShop source directory.
+     */
+    private function getProjectShopSourcePath()
+    {
+        return vfsStream::url('root/oxideshop_ce/vendor/oxid-esales/oxideshop-ce/source');
     }
 }

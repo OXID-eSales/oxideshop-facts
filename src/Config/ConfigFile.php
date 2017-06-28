@@ -30,6 +30,9 @@ class ConfigFile
 
     const PARAMETER_SOURCE_PATH = 'source_path';
 
+    const ERROR_CODE_CONFIGFILE_PATH_EMPTY = 1;
+    const ERROR_CODE_CONFIGFILE_NOT_FOUND = 2;
+
     /**
      * Initializes the instance. Loads config variables from the file.
      *
@@ -59,7 +62,10 @@ class ConfigFile
             $count++;
         }
         if (empty($pathToConfigIncFile)) {
-            throw new \Exception('One of the files vendor/autoload.php or source/config.inc.php was not found!');
+            throw new \Exception('One of the files vendor/autoload.php or source/config.inc.php was not found!', static::ERROR_CODE_CONFIGFILE_PATH_EMPTY);
+        }
+        if (!file_exists($pathToConfigIncFile)) {
+            throw new \Exception('File source/config.inc.php was not found!', static::ERROR_CODE_CONFIGFILE_NOT_FOUND);
         }
 
         $this->setVar(static::PARAMETER_VENDOR_PATH, $rootPath.'vendor');
