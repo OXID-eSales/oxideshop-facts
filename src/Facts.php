@@ -144,31 +144,49 @@ class Facts
         return $edition;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDatabaseName()
     {
         return $this->getConfigReader()->dbName;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDatabaseUserName()
     {
         return $this->getConfigReader()->dbUser;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDatabasePassword()
     {
         return $this->getConfigReader()->dbPwd;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDatabaseHost()
     {
         return $this->getConfigReader()->dbHost;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDatabaseDriver()
     {
         return $this->getConfigReader()->dbType;
     }
 
+    /**
+     * @return array
+     */
     public function getMigrationPaths()
     {
         $editionSelector = new EditionSelector();
@@ -196,7 +214,7 @@ class Facts
     /**
      * Safeguard for ConfigFile object.
      *
-     * @return null|ConfigFile
+     * @return ConfigFile
      */
     protected function getConfigReader()
     {
