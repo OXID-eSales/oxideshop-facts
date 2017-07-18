@@ -43,6 +43,16 @@ class Facts
     const COMPOSER_PACKAGE_OXIDESHOP_CE = 'oxideshop-ce';
 
     /**
+     * @var string The composer package name of the OXID eShop Professional Edition.
+     */
+    const COMPOSER_PACKAGE_OXIDESHOP_PE = 'oxideshop-pe';
+
+    /**
+     * @var string The composer package name of the OXID eShop Enterprise Edition.
+     */
+    const COMPOSER_PACKAGE_OXIDESHOP_EE = 'oxideshop-ee';
+
+    /**
      * @var null | ConfigFile
      */
     protected $configReader = null;
@@ -113,6 +123,30 @@ class Facts
         }
 
         return $communityEditionSourcePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProfessionalEditionRootPath()
+    {
+        $vendorPath = $this->getVendorPath();
+
+        $professionalEditionSourcePath = Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_PE);
+
+        return $professionalEditionSourcePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEnterpriseEditionRootPath()
+    {
+        $vendorPath = $this->getVendorPath();
+
+        $enterpriseEditionSourcePath = Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_EE);
+
+        return $enterpriseEditionSourcePath;
     }
 
     /**
