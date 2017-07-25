@@ -22,6 +22,7 @@
 namespace OxidEsales\Facts\Edition;
 
 use OxidEsales\Facts\Config\ConfigFile;
+use OxidEsales\Facts\Facts;
 
 /**
  * Class is responsible for returning edition of OXID eShop.
@@ -89,33 +90,77 @@ class EditionSelector
     }
 
     /**
-     * Find edition by classmap only.
+     * Check for forced edition in config file. If edition is not specified,
+     * determine it by ClassMap existence.
      *
      * @return string
+     *
+     * @throws \Exception
      */
-    static public function findEditionByClassMap()
+    protected function findEdition()
     {
-        $edition = static::COMMUNITY;
-        if (class_exists(\OxidEsales\EshopEnterprise\Core\Autoload\UnifiedNameSpaceClassMap::class)) {
+        try {
+            $edition = $this->findEditionByConfigFile();
+            if (empty($edition)) {
+                $edition = $this->findEditionByEditionFiles();
+            }
+        } catch (\Exception $exception) {
+            try {
+                $edition = $this->findEditionByEditionFiles();
+            } catch (\Exception $exception) {
+                throw $exception;
+            }
+        }
+
+        return strtoupper($edition);
+    }
+
+
+    /**
+     * Find edition by directories of the editions in the vendor directory
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function findEditionByEditionFiles()
+    {
+        $facts = $this->getFacts();
+        $edition = '';
+        if (is_dir($facts->getEnterpriseEditionRootPath()) === true) {
             $edition = static::ENTERPRISE;
-        } elseif (class_exists(\OxidEsales\EshopProfessional\Core\Autoload\UnifiedNameSpaceClassMap::class)) {
+        } elseif (is_dir($facts->getProfessionalEditionRootPath()) === true) {
             $edition = static::PROFESSIONAL;
+        } elseif (is_dir($facts->getCommunityEditionSourcePath()) === true) {
+            $edition = static::COMMUNITY;
+        }
+
+        if ($edition === '') {
+            throw new \Exception("Shop directory structure is not setup properly. Edition could not be detected");
         }
 
         return $edition;
     }
 
     /**
-     * Check for forced edition in config file. If edition is not specified,
-     * determine it by ClassMap existence.
-     *
-     * @return string
+     * @return Facts
      */
-    protected function findEdition()
+    private function getFacts()
     {
-        $edition = $this->getConfigFile()->getVar('edition') ?: self::findEditionByClassMap();
+        return new Facts();
+    }
 
-        return strtoupper($edition);
+    /**
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function findEditionByConfigFile()
+    {
+        $configFile = $this->getConfigFile();
+        $edition = $configFile->getVar('edition');
+
+        return $edition;
     }
 
     /**
@@ -128,6 +173,7 @@ class EditionSelector
         if (is_null($this->configFile)) {
             $this->configFile = new ConfigFile();
         }
+
         return $this->configFile;
     }
 }

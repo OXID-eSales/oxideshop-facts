@@ -164,16 +164,8 @@ class Facts
      */
     public function getEdition()
     {
-        try {
-            $editionSelector = new EditionSelector();
-            $edition = $editionSelector->getEdition();
-        } catch (\Exception $exception) {
-            if ($exception->getCode() == ConfigFile::ERROR_CODE_CONFIGFILE_NOT_FOUND) {
-                $edition = EditionSelector::findEditionByClassMap();
-            } else {
-                throw $exception;
-            }
-        }
+        $editionSelector = new EditionSelector();
+        $edition = $editionSelector->getEdition();
 
         return $edition;
     }
