@@ -171,6 +171,36 @@ class Facts
     }
 
     /**
+     * @return bool
+     */
+    public function isEnterprise()
+    {
+        $editionSelector = new EditionSelector();
+
+        return $editionSelector->isEnterprise();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isProfessional()
+    {
+        $editionSelector = new EditionSelector();
+
+        return $editionSelector->isProfessional();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCommunity()
+    {
+        $editionSelector = new EditionSelector();
+
+        return $editionSelector->isCommunity();
+    }
+
+    /**
      * @return mixed
      */
     public function getDatabaseName()
