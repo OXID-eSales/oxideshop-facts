@@ -235,6 +235,14 @@ class Facts
     /**
      * @return mixed
      */
+    public function getDatabasePort()
+    {
+        return $this->getConfigReader()->dbPort;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getDatabaseDriver()
     {
         return $this->getConfigReader()->dbType;
