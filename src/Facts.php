@@ -249,6 +249,14 @@ class Facts
     }
 
     /**
+     * @return string
+     */
+    public function getShopUrl()
+    {
+        return $this->getConfigReader()->sShopURL;
+    }
+
+    /**
      * @return array
      */
     public function getMigrationPaths()
