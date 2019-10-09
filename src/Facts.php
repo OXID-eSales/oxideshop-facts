@@ -58,13 +58,21 @@ class Facts
     protected $configReader = null;
 
     /**
+     * @var string
+     */
+    protected $startPath;
+
+    /**
      * Facts constructor.
      *
      * @param string $startPath               Start path.
      * @param null   $configFile              Optional ConfigFile
      */
-    public function __construct($startPath = __DIR__, $configFile = null)
+    public function __construct($startPath = null, $configFile = null)
     {
+        if (!$startPath) {
+            $startPath = defined('INSTALLATION_ROOT_PATH') ? INSTALLATION_ROOT_PATH : __DIR__;
+        }
         $this->startPath = $startPath;
         $this->configReader = $configFile;
     }

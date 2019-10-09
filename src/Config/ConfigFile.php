@@ -52,7 +52,11 @@ class ConfigFile
         $autoloaderName = 'vendor/autoload.php';
         $count = 0;
         while ($count < 8) {
-            $fullPathToAutoload = __DIR__ . $pathToAutoloadFromThisScript;
+            if (defined('INSTALLATION_ROOT_PATH')) {
+                $fullPathToAutoload = INSTALLATION_ROOT_PATH . $pathToAutoloadFromThisScript;
+            } else {
+                $fullPathToAutoload = __DIR__ . $pathToAutoloadFromThisScript;
+            }
             if (is_file($fullPathToAutoload . $autoloaderName)) {
                 $rootPath = $fullPathToAutoload;
                 $pathToConfigIncFile = $rootPath.'source/config.inc.php';
