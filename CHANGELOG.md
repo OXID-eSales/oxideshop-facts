@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/ ).
 and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
+## [2.3.2] - Unreleased
+
+### Fixed
+
+- Fixed naming of required components [PR-3](https://github.com/OXID-eSales/oxideshop-facts/pull/3)
+
 ## [2.3.1] - 2018-12-03
 
 ### Changed
