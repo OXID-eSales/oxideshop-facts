@@ -90,7 +90,7 @@ class Facts
             '/../../../../vendor',
         ];
 
-        $rootPath = '';
+        $rootPath = getcwd();
         foreach ($vendorPaths as $vendorPath) {
             if (file_exists(Path::join($this->startPath, $vendorPath))) {
                 $rootPath = Path::join($this->startPath, $vendorPath, '..');
