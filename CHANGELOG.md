@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/ ).
 and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
-## [master] - Unreleased
+## Unreleased
 
 ### Changed
 
-- Update symfony usage to use at least 5.0.4
+- Update symfony components to version 5
 
 ## [2.3.2] - Unreleased
 
