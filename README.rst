@@ -8,6 +8,13 @@ This component is dedicated to provide primary information/facts about current
 OXID eShop installation. It could be used without shop bootstrap
 for example before setup of a shop.
 
+
+Branch Compatibility
+--------------------
+
+* master branch is compatible with OXID eShop compilation master
+* b-1.x branch is compatible with OXID eShop unreleased b-6.0.x up to b-6.2.x
+
 Bugs and Issues
 ---------------
 
