@@ -128,6 +128,20 @@ class Facts
     /**
      * @return string
      */
+    public function getCommunityEditionRootPath()
+    {
+        $communityEditionRootPath = $this->getShopRootPath();
+
+        if ($this->isProjectEshopInstallation()) {
+            $communityEditionRootPath = Path::join($this->getVendorPath(), self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE);
+        }
+
+        return $communityEditionRootPath;
+    }
+
+    /**
+     * @return string
+     */
     public function getProfessionalEditionRootPath()
     {
         $vendorPath = $this->getVendorPath();
