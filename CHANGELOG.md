@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
 ## [2.3.2] - Unreleased
 
+### Added
+
+- Add `getCommunityEditionRootPath` to get community edition root path
+
 ### Fixed
 
 - Fixed naming of required components [PR-3](https://github.com/OXID-eSales/oxideshop-facts/pull/3)
