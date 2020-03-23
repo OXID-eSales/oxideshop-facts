@@ -26,13 +26,13 @@ use Webmozart\PathUtil\Path;
 use Symfony\Component\Filesystem\Filesystem;
 use OxidEsales\Facts\Config\ConfigFile;
 
-class ConfigFileTest extends \PHPUnit_Framework_TestCase
+class ConfigFileTest extends \PHPUnit\Framework\TestCase
 {
     private $temporaryPath;
     private $vendorPath;
     private $targetPath;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->temporaryPath = Path::join(__DIR__, 'tmp');
         $this->vendorPath = Path::join(__DIR__, 'tmp', 'testData');
@@ -40,7 +40,7 @@ class ConfigFileTest extends \PHPUnit_Framework_TestCase
         $this->buildDirectory();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $filesystem = new Filesystem();
         $filesystem->remove($this->temporaryPath);

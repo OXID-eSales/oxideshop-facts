@@ -23,7 +23,7 @@ namespace OxidEsales\Facts\Tests\Unit;
 
 use OxidEsales\Facts\Edition\EditionSelector;
 
-class EditionSelectorTest extends \PHPUnit_Framework_TestCase
+class EditionSelectorTest extends \PHPUnit\Framework\TestCase
 {
     public function testReturnsEditionFromConfig()
     {
@@ -147,8 +147,11 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
      */
     private function getConfigStub($edition)
     {
-        $config = $this->getMock('ConfigFile', ['getVar']);
-        $config->method('getVar')->will($this->returnValue($edition));
+        $config = $this->getMockBuilder('ConfigFile')
+        ->setMethods(['getVar'])
+        ->getMock();
+
+        $config->method('getVar')->willReturn($edition);
 
         return $config;
     }

@@ -24,7 +24,7 @@ namespace OxidEsales\Facts\Tests\Unit;
 use org\bovigo\vfs\vfsStream;
 use OxidEsales\Facts\Facts;
 
-class FactsTest extends \PHPUnit_Framework_TestCase
+class FactsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetShopRootPath()
     {
@@ -96,7 +96,7 @@ class FactsTest extends \PHPUnit_Framework_TestCase
 
         $__DIR__stub = $root . '/oxideshop_ce/vendor/oxid-esales/oxideshop-facts/src';
 
-        $configFile = $this->getMock('ConfigFile');
+        $configFile = $this->getMockBuilder('ConfigFile');
 
         $facts = new Facts($__DIR__stub, $configFile);
 
