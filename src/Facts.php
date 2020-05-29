@@ -21,6 +21,9 @@
 
 namespace OxidEsales\Facts;
 
+use OxidEsales\EshopCommunity\Internal\Container\BootstrapContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContextInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Dao\ProjectConfigurationDaoInterface;
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
 use Webmozart\PathUtil\Path;
@@ -292,7 +295,29 @@ class Facts
         }
 
         $migrationPaths['pr'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH)
-                                    . '/migration/project_migrations.yml';
+                                . '/migration/project_migrations.yml';
+
+
+        $projectConfigurationDao = BootstrapContainerFactory::getBootstrapContainer()
+            ->get(ProjectConfigurationDaoInterface::class)
+            ->getConfiguration();
+
+        $basicContext = BootstrapContainerFactory::getBootstrapContainer()
+            ->get(BasicContextInterface::class);
+
+        $shopConfigurationDao = $projectConfigurationDao
+            ->getShopConfiguration($basicContext->getDefaultShopId());
+
+        foreach ($shopConfigurationDao->getModuleConfigurations() as $moduleConfiguration) {
+            $migrationConfigurationPath = Path::join(
+                $basicContext->getModulesPath(),
+                $moduleConfiguration->getPath(),
+                '/migration/migrations.yml'
+            );
+            if (file_exists($migrationConfigurationPath)) {
+                $migrationPaths[$moduleConfiguration->getId()] = $migrationConfigurationPath;
+            }
+        }
 
         return $migrationPaths;
     }
