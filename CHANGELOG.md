@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/ ).
 ### Changed
 
 - Update symfony components to version 5
+- Added installed module migration paths in `getMigrationPaths` method
 
 ## [2.3.2] - 2020-03-19
 
