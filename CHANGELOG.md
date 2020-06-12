@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/ ).
 and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
-## [2.4.0] - 2020-06-10
+## [3.0.0] - 2020-06-12
 
 ### Added
 
@@ -41,7 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
 - `Facts::getDatabasePort()`
 
-[2.4.0]: https://github.com/OXID-eSales/oxideshop-facts/compare/v2.3.2...v2.4.0
+[3.0.0]: https://github.com/OXID-eSales/oxideshop-facts/compare/v2.3.2...v3.0.0
 [2.3.2]: https://github.com/OXID-eSales/oxideshop-facts/compare/v2.3.1...v2.3.2
 [2.3.1]: https://github.com/OXID-eSales/oxideshop-facts/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/OXID-eSales/oxideshop-facts/compare/v2.2.0...v2.3.0
