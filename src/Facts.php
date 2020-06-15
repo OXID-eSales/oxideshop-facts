@@ -271,35 +271,6 @@ class Facts
     }
 
     /**
-     * @return array
-     *
-     * @deprecated this method will be remove in next major version and it will moved to doctrine-migration-wrapper component
-     */
-    public function getMigrationPaths(): array
-    {
-        $editionSelector = new EditionSelector();
-
-        $migrationPaths = [
-            'ce' => $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH) . '/migration/migrations.yml',
-        ];
-
-        if ($editionSelector->isProfessional() || $editionSelector->isEnterprise()) {
-            $migrationPaths['pe'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                                    . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-pe/migration/migrations.yml';
-        }
-
-        if ($editionSelector->isEnterprise()) {
-            $migrationPaths['ee'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                                    . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-ee/migration/migrations.yml';
-        }
-
-        $migrationPaths['pr'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH)
-                                . '/migration/project_migrations.yml';
-
-        return $migrationPaths;
-    }
-
-    /**
      * Safeguard for ConfigFile object.
      *
      * @return ConfigFile
