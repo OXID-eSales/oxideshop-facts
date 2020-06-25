@@ -11,10 +11,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
 - Update symfony components to version 5
 
-### Removed
-
-- `OxidEsales\Facts::getMigrationPaths` method
-
 ## [2.4.0] - Unreleased
 
 ### Deprecated
