@@ -3,7 +3,7 @@
     "description": "OXID eShop facts",
     "license": "GPL-3.0-only",
     "require": {
-        "symfony/filesystem": "^3.2",
+        "symfony/filesystem": "^3.2 || ^4.4.17",
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
