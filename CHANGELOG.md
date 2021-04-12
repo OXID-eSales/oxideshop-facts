@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
 - Update symfony components to version 5
 
-## [2.4.0] - Unreleased
+## [2.4.0] - 2021-04-12
 
 ### Deprecated
 
