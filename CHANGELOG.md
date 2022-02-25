@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/ ).
 
 - Update symfony components to version 5
 
+## [2.4.1] - Unreleased
+
+### Fixed
+- Passing null to string parameter in `Config\ConfigFile`
+
 ## [2.4.0] - 2021-04-12
 
 ### Deprecated
