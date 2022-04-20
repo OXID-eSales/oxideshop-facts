@@ -1,31 +1,22 @@
 <?php
+
 /**
- * This file is part of OXID eSales Facts.
- *
- * OXID eSales Facts is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OXID eSales Facts is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with OXID eSales Facts.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2017
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
  */
+
+declare(strict_types=1);
 
 namespace OxidEsales\Facts\Tests\Unit;
 
+use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class EditionSelectorTest extends \PHPUnit_Framework_TestCase
+final class EditionSelectorTest extends TestCase
 {
-    public function testReturnsEditionFromConfig()
+    public function testReturnsEditionFromConfig(): void
     {
         $config = $this->getConfigStub('CE');
 
@@ -34,7 +25,7 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('CE', $editionSelector->getEdition());
     }
 
-    public function providerGetCommunityEdition()
+    public function providerGetCommunityEdition(): array
     {
         return [
             ['CE'],
@@ -51,7 +42,7 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider providerGetCommunityEdition
      */
-    public function testForcingEditionIsCaseInsensitive($edition)
+    public function testForcingEditionIsCaseInsensitive($edition): void
     {
         $config = $this->getConfigStub($edition);
 
@@ -70,7 +61,7 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider providerGetCommunityEdition
      */
-    public function testGetCommunityEdition($edition)
+    public function testGetCommunityEdition($edition): void
     {
         $config = $this->getConfigStub($edition);
 
@@ -81,7 +72,7 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($editionSelector->isEnterprise());
     }
 
-    public function providerGetProfessionalEdition()
+    public function providerGetProfessionalEdition(): array
     {
         return [
             ['PE'],
@@ -98,7 +89,7 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider providerGetProfessionalEdition
      */
-    public function testGetProfessionalEdition($edition)
+    public function testGetProfessionalEdition($edition): void
     {
         $config = $this->getConfigStub($edition);
 
@@ -109,7 +100,7 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($editionSelector->isEnterprise());
     }
 
-    public function providerGetEnterpriseEdition()
+    public function providerGetEnterpriseEdition(): array
     {
         return [
             ['EE'],
@@ -126,7 +117,7 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider providerGetEnterpriseEdition
      */
-    public function testGetEnterpriseEdition($edition)
+    public function testGetEnterpriseEdition($edition): void
     {
         $config = $this->getConfigStub($edition);
 
@@ -143,13 +134,10 @@ class EditionSelectorTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $edition Edition name to return, etc. 'CE'
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getConfigStub($edition)
+    private function getConfigStub($edition): MockObject
     {
-        $config = $this->getMock('ConfigFile', ['getVar']);
-        $config->method('getVar')->will($this->returnValue($edition));
-
-        return $config;
+        return $this->createConfiguredMock(ConfigFile::class, ['getVar' => $edition]);
     }
 }

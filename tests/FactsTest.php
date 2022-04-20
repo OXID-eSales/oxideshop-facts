@@ -1,32 +1,22 @@
 <?php
+
 /**
- * This file is part of OXID eSales Facts.
- *
- * OXID eSales Facts is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OXID eSales Facts is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with OXID eSales Facts.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2017
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
  */
+
+declare(strict_types=1);
 
 namespace OxidEsales\Facts\Tests\Unit;
 
 use org\bovigo\vfs\vfsStream;
+use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Facts;
+use PHPUnit\Framework\TestCase;
 
-class FactsTest extends \PHPUnit_Framework_TestCase
+class FactsTest extends TestCase
 {
-    public function testGetShopRootPath()
+    public function testGetShopRootPath(): void
     {
         $facts = $this->buildFacts();
 
@@ -34,7 +24,7 @@ class FactsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedRoot, $facts->getShopRootPath());
     }
 
-    public function testGetVendorPath()
+    public function testGetVendorPath(): void
     {
         $facts = $this->buildFacts();
 
@@ -42,7 +32,7 @@ class FactsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedVendor, $facts->getVendorPath());
     }
 
-    public function testGetSourcePath()
+    public function testGetSourcePath(): void
     {
         $facts = $this->buildFacts();
 
@@ -50,21 +40,21 @@ class FactsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedSource, $facts->getSourcePath());
     }
 
-    public function testGetCommunityEditionSourcePathNormalInstallation()
+    public function testGetCommunityEditionSourcePathNormalInstallation(): void
     {
         $facts = $this->buildFacts();
 
         $this->assertEquals($this->getShopSourcePath(), $facts->getCommunityEditionSourcePath());
     }
 
-    public function testGetCommunityEditionSourcePathProjectInstallation()
+    public function testGetCommunityEditionSourcePathProjectInstallation(): void
     {
         $facts = $this->buildFacts(true);
 
         $this->assertEquals($this->getProjectShopSourcePath(), $facts->getCommunityEditionSourcePath());
     }
 
-    private function buildFacts($isProjectInstallation = false)
+    private function buildFacts($isProjectInstallation = false): Facts
     {
 
         $vendorOxidesaleDirectory = [
@@ -96,11 +86,9 @@ class FactsTest extends \PHPUnit_Framework_TestCase
 
         $__DIR__stub = $root . '/oxideshop_ce/vendor/oxid-esales/oxideshop-facts/src';
 
-        $configFile = $this->getMock('ConfigFile');
+        $configFile = $this->createMock(ConfigFile::class);
 
-        $facts = new Facts($__DIR__stub, $configFile);
-
-        return $facts;
+        return new Facts($__DIR__stub, $configFile);
     }
 
     /**
@@ -108,7 +96,7 @@ class FactsTest extends \PHPUnit_Framework_TestCase
      *
      * @return string The path to the OXID eShop source directory.
      */
-    private function getShopSourcePath()
+    private function getShopSourcePath(): string
     {
         return vfsStream::url('root/oxideshop_ce/source');
     }
@@ -118,7 +106,7 @@ class FactsTest extends \PHPUnit_Framework_TestCase
      *
      * @return string The path to the OXID eShop source directory.
      */
-    private function getProjectShopSourcePath()
+    private function getProjectShopSourcePath(): string
     {
         return vfsStream::url('root/oxideshop_ce/vendor/oxid-esales/oxideshop-ce/source');
     }

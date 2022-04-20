@@ -7,7 +7,7 @@
         "webmozart/path-util": "^2.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8",
+        "phpunit/phpunit": "^8.5",
         "mikey179/vfsstream": "^1.6"
     },
     "autoload": {
