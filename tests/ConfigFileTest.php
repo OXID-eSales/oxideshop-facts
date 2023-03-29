@@ -11,7 +11,7 @@ namespace OxidEsales\Facts\Tests\Unit;
 
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Filesystem\Filesystem;
 use OxidEsales\Facts\Config\ConfigFile;
 

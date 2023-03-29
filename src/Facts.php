@@ -23,7 +23,7 @@ namespace OxidEsales\Facts;
 
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * Class responsible to return information about OXID eShop.

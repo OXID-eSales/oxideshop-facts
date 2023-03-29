@@ -8,14 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/ ).
 ## [v4.1.0] - 2023-04-19
 
 ### Changed
-
 - License update
 
-## [v4.0.0] - 2022-10-06
+### Removed
+- Dependency to webmozart/path-util
+
+
+## [4.0.0] - 2022-10-06
 
 ### Removed
 - Composer v1 support
-- 
+
 ## [v3.0.0] - 2021-06-10
 
 ### Changed
