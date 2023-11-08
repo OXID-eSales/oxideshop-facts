@@ -17,8 +17,8 @@ use OxidEsales\Facts\Config\ConfigFile;
 
 final class ConfigFileTest extends TestCase
 {
-    private $temporaryPath;
-    private $vendorPath;
+    private string $temporaryPath;
+    private string $vendorPath;
 
     protected function setUp(): void
     {

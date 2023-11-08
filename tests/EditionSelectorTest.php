@@ -25,7 +25,7 @@ final class EditionSelectorTest extends TestCase
         $this->assertSame('CE', $editionSelector->getEdition());
     }
 
-    public function providerGetCommunityEdition(): array
+    public static function providerGetCommunityEdition(): array
     {
         return [
             ['CE'],
@@ -36,10 +36,6 @@ final class EditionSelectorTest extends TestCase
     }
 
     /**
-     * Test that returns edition independent from camel case.
-     *
-     * @param string $edition
-     *
      * @dataProvider providerGetCommunityEdition
      */
     public function testForcingEditionIsCaseInsensitive($edition): void
@@ -55,10 +51,6 @@ final class EditionSelectorTest extends TestCase
     }
 
     /**
-     * Test that returns community edition independent from camel case.
-     *
-     * @param string $edition
-     *
      * @dataProvider providerGetCommunityEdition
      */
     public function testGetCommunityEdition($edition): void
@@ -72,7 +64,7 @@ final class EditionSelectorTest extends TestCase
         $this->assertFalse($editionSelector->isEnterprise());
     }
 
-    public function providerGetProfessionalEdition(): array
+    public static function providerGetProfessionalEdition(): array
     {
         return [
             ['PE'],
@@ -83,10 +75,6 @@ final class EditionSelectorTest extends TestCase
     }
 
     /**
-     * Test that returns professional edition independent from camel case.
-     *
-     * @param string $edition
-     *
      * @dataProvider providerGetProfessionalEdition
      */
     public function testGetProfessionalEdition($edition): void
@@ -100,7 +88,7 @@ final class EditionSelectorTest extends TestCase
         $this->assertFalse($editionSelector->isEnterprise());
     }
 
-    public function providerGetEnterpriseEdition(): array
+    public static function providerGetEnterpriseEdition(): array
     {
         return [
             ['EE'],
@@ -111,10 +99,6 @@ final class EditionSelectorTest extends TestCase
     }
 
     /**
-     * Test that returns professional edition independent from camel case.
-     *
-     * @param string $edition
-     *
      * @dataProvider providerGetEnterpriseEdition
      */
     public function testGetEnterpriseEdition($edition): void
@@ -128,14 +112,6 @@ final class EditionSelectorTest extends TestCase
         $this->assertTrue($editionSelector->isEnterprise());
     }
 
-    /**
-     * Creates a stub for config file.
-     * Allows to force an edition.
-     *
-     * @param string $edition Edition name to return, etc. 'CE'
-     *
-     * @return MockObject
-     */
     private function getConfigStub($edition): MockObject
     {
         return $this->createConfiguredMock(ConfigFile::class, ['getVar' => $edition]);
