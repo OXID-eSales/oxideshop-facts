@@ -91,21 +91,11 @@ class FactsTest extends TestCase
         return new Facts($__DIR__stub, $configFile);
     }
 
-    /**
-     * Get the path to the OXID eShop source directory.
-     *
-     * @return string The path to the OXID eShop source directory.
-     */
     private function getShopSourcePath(): string
     {
         return vfsStream::url('root/oxideshop_ce/source');
     }
 
-    /**
-     * Get the path to the OXID eShop source directory.
-     *
-     * @return string The path to the OXID eShop source directory.
-     */
     private function getProjectShopSourcePath(): string
     {
         return vfsStream::url('root/oxideshop_ce/vendor/oxid-esales/oxideshop-ce/source');
