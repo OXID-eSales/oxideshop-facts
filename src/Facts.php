@@ -23,6 +23,7 @@ namespace OxidEsales\Facts;
 
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
+use ReturnTypeWillChange;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -56,6 +57,8 @@ class Facts
      * @var null | ConfigFile
      */
     protected $configReader = null;
+
+    protected string $startPath;
 
     /**
      * Facts constructor.

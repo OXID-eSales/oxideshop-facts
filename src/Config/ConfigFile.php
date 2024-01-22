@@ -24,6 +24,7 @@ namespace OxidEsales\Facts\Config;
 /**
  * Wraps and provides getters for configuration constants stored in configuration file (usually config.inc.php).
  */
+#[\AllowDynamicProperties]
 class ConfigFile
 {
     const PARAMETER_VENDOR_PATH = 'vendor_path';
