@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales OXID eShop Facts.
  *
@@ -15,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OXID eSales OXID eShop Facts. If not, see <http://www.gnu.org/licenses/>.
  *
- * @link      http://www.oxid-esales.com
+ * @link          http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
@@ -30,6 +31,7 @@ use Symfony\Component\Filesystem\Path;
  * Could be used without shop bootstrap
  * for example before setup of a shop.
  */
+#[\AllowDynamicProperties]
 class Facts
 {
     /**
@@ -60,8 +62,8 @@ class Facts
     /**
      * Facts constructor.
      *
-     * @param string $startPath               Start path.
-     * @param null   $configFile              Optional ConfigFile
+     * @param string $startPath Start path.
+     * @param null   $configFile Optional ConfigFile
      */
     public function __construct($startPath = __DIR__, $configFile = null)
     {
@@ -117,7 +119,13 @@ class Facts
         $vendorPath = $this->getVendorPath();
 
         if ($this->isProjectEshopInstallation()) {
-            $communityEditionSourcePath = Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE, 'source');
+            $communityEditionSourcePath =
+                Path::join(
+                    $vendorPath,
+                    self::COMPOSER_VENDOR_OXID_ESALES,
+                    self::COMPOSER_PACKAGE_OXIDESHOP_CE,
+                    'source'
+                );
         } else {
             $communityEditionSourcePath = $this->getSourcePath();
         }
@@ -133,7 +141,12 @@ class Facts
         $communityEditionRootPath = $this->getShopRootPath();
 
         if ($this->isProjectEshopInstallation()) {
-            $communityEditionRootPath = Path::join($this->getVendorPath(), self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE);
+            $communityEditionRootPath =
+                Path::join(
+                    $this->getVendorPath(),
+                    self::COMPOSER_VENDOR_OXID_ESALES,
+                    self::COMPOSER_PACKAGE_OXIDESHOP_CE
+                );
         }
 
         return $communityEditionRootPath;
@@ -146,7 +159,8 @@ class Facts
     {
         $vendorPath = $this->getVendorPath();
 
-        $professionalEditionSourcePath = Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_PE);
+        $professionalEditionSourcePath =
+            Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_PE);
 
         return $professionalEditionSourcePath;
     }
@@ -158,7 +172,8 @@ class Facts
     {
         $vendorPath = $this->getVendorPath();
 
-        $enterpriseEditionSourcePath = Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_EE);
+        $enterpriseEditionSourcePath =
+            Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_EE);
 
         return $enterpriseEditionSourcePath;
     }
@@ -172,9 +187,8 @@ class Facts
     }
 
     /**
-     * @throws \Exception
-     *
      * @return string Eshop edition as capital two letters code.
+     * @throws \Exception
      */
     public function getEdition()
     {
@@ -285,16 +299,16 @@ class Facts
 
         if ($editionSelector->isProfessional() || $editionSelector->isEnterprise()) {
             $migrationPaths['pe'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                                    . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-pe/migration/migrations.yml';
+                . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-pe/migration/migrations.yml';
         }
 
         if ($editionSelector->isEnterprise()) {
             $migrationPaths['ee'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                                    . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-ee/migration/migrations.yml';
+                . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-ee/migration/migrations.yml';
         }
 
         $migrationPaths['pr'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH)
-                                . '/migration/project_migrations.yml';
+            . '/migration/project_migrations.yml';
 
         return $migrationPaths;
     }
@@ -319,7 +333,8 @@ class Facts
      */
     private function isProjectEshopInstallation()
     {
-        $vendorCommunityEditionPath = Path::join($this->getVendorPath(), self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE);
+        $vendorCommunityEditionPath =
+            Path::join($this->getVendorPath(), self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE);
 
         return is_dir($vendorCommunityEditionPath);
     }

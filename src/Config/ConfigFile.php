@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales OXID eShop Facts.
  *
@@ -15,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OXID eSales OXID eShop Facts. If not, see <http://www.gnu.org/licenses/>.
  *
- * @link      http://www.oxid-esales.com
+ * @link          http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2017
  */
 
@@ -55,21 +56,24 @@ class ConfigFile
             $fullPathToAutoload = __DIR__ . $pathToAutoloadFromThisScript;
             if (is_file($fullPathToAutoload . $autoloaderName)) {
                 $rootPath = $fullPathToAutoload;
-                $pathToConfigIncFile = $rootPath.'source/config.inc.php';
+                $pathToConfigIncFile = $rootPath . 'source/config.inc.php';
                 break;
             }
             $pathToAutoloadFromThisScript = '/..' . $pathToAutoloadFromThisScript;
             $count++;
         }
         if (empty($pathToConfigIncFile)) {
-            throw new \Exception('One of the files vendor/autoload.php or source/config.inc.php was not found!', static::ERROR_CODE_CONFIGFILE_PATH_EMPTY);
+            throw new \Exception(
+                'One of the files vendor/autoload.php or source/config.inc.php was not found!',
+                static::ERROR_CODE_CONFIGFILE_PATH_EMPTY
+            );
         }
         if (!file_exists($pathToConfigIncFile)) {
             throw new \Exception('File source/config.inc.php was not found!', static::ERROR_CODE_CONFIGFILE_NOT_FOUND);
         }
 
-        $this->setVar(static::PARAMETER_VENDOR_PATH, $rootPath.'vendor');
-        $this->setVar(static::PARAMETER_SOURCE_PATH, $rootPath.'source');
+        $this->setVar(static::PARAMETER_VENDOR_PATH, $rootPath . 'vendor');
+        $this->setVar(static::PARAMETER_SOURCE_PATH, $rootPath . 'source');
         $this->loadVars($pathToConfigIncFile);
     }
 
