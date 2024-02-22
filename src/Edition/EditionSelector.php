@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OXID eSales OXID eShop Facts.
  *
@@ -27,9 +28,9 @@ use OxidEsales\Facts\Facts;
 /**
  * Class is responsible for returning edition of OXID eShop.
  */
+#[\AllowDynamicProperties]
 class EditionSelector
 {
-
     const ENTERPRISE = 'EE';
 
     const PROFESSIONAL = 'PE';
@@ -114,7 +115,6 @@ class EditionSelector
 
         return strtoupper($edition);
     }
-
 
     /**
      * Find edition by directories of the editions in the vendor directory
