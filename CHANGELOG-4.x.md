@@ -1,6 +1,6 @@
 # Change Log for OXID eShop facts
 
-## v4.2.0 - unreleased
+## v4.2.0 - 2024-03-15
 
 ### Added
 - PHPUnit v10 support
