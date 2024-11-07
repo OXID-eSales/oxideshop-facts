@@ -11,6 +11,7 @@ namespace OxidEsales\Facts\Tests\Unit;
 
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,10 +36,8 @@ final class EditionSelectorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerGetCommunityEdition
-     */
-    public function testForcingEditionIsCaseInsensitive($edition): void
+    #[DataProvider('providerGetCommunityEdition')]
+    public function testForcingEditionIsCaseInsensitive(string $edition): void
     {
         $config = $this->getConfigStub($edition);
 
@@ -50,10 +49,8 @@ final class EditionSelectorTest extends TestCase
         $this->assertFalse($editionSelector->isEnterprise());
     }
 
-    /**
-     * @dataProvider providerGetCommunityEdition
-     */
-    public function testGetCommunityEdition($edition): void
+    #[DataProvider('providerGetCommunityEdition')]
+    public function testGetCommunityEdition(string $edition): void
     {
         $config = $this->getConfigStub($edition);
 
@@ -74,10 +71,8 @@ final class EditionSelectorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerGetProfessionalEdition
-     */
-    public function testGetProfessionalEdition($edition): void
+    #[DataProvider('providerGetProfessionalEdition')]
+    public function testGetProfessionalEdition(string $edition): void
     {
         $config = $this->getConfigStub($edition);
 
@@ -98,10 +93,8 @@ final class EditionSelectorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerGetEnterpriseEdition
-     */
-    public function testGetEnterpriseEdition($edition): void
+    #[DataProvider('providerGetEnterpriseEdition')]
+    public function testGetEnterpriseEdition(string $edition): void
     {
         $config = $this->getConfigStub($edition);
 
