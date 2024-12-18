@@ -22,8 +22,12 @@
 
 namespace OxidEsales\Facts\Edition;
 
+use OxidEsales\EshopCommunity\Core\Di\ContainerFacade;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContextInterface;
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Facts;
+
+use OxidEsales\EshopCommunity\Internal\Framework\Edition\Edition;
 
 /**
  * Class is responsible for returning edition of OXID eShop.
@@ -31,29 +35,11 @@ use OxidEsales\Facts\Facts;
 #[\AllowDynamicProperties]
 class EditionSelector
 {
-    const ENTERPRISE = 'EE';
+    private Edition $edition;
 
-    const PROFESSIONAL = 'PE';
-
-    const COMMUNITY = 'CE';
-
-    /** @var string Edition abbreviation */
-    private $edition = null;
-
-    /** @var ConfigFile */
-    private $configFile = null;
-
-    /**
-     * EditionSelector constructor.
-     * Adds possibility to inject ConfigFile to force different settings.
-     *
-     * @param null|ConfigFile $configFile
-     */
-    public function __construct($configFile = null)
+    public function __construct()
     {
-        $this->configFile = $configFile;
-
-        $this->edition = $this->findEdition();
+        $this->edition = ContainerFacade::get(BasicContextInterface::class)->getEdition();
     }
 
     /**
@@ -63,7 +49,7 @@ class EditionSelector
      */
     public function getEdition()
     {
-        return $this->edition;
+        return (string) $this->edition?->value;
     }
 
     /**
@@ -71,7 +57,7 @@ class EditionSelector
      */
     public function isEnterprise()
     {
-        return $this->getEdition() === static::ENTERPRISE;
+        return $this->edition === Edition::Enterprise;
     }
 
     /**
@@ -79,7 +65,7 @@ class EditionSelector
      */
     public function isProfessional()
     {
-        return $this->getEdition() === static::PROFESSIONAL;
+        return $this->edition === Edition::Professional;
     }
 
     /**
@@ -87,93 +73,6 @@ class EditionSelector
      */
     public function isCommunity()
     {
-        return $this->getEdition() === static::COMMUNITY;
-    }
-
-    /**
-     * Check for forced edition in config file. If edition is not specified,
-     * determine it by ClassMap existence.
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
-    protected function findEdition()
-    {
-        try {
-            $edition = $this->findEditionByConfigFile();
-            if (empty($edition)) {
-                $edition = $this->findEditionByEditionFiles();
-            }
-        } catch (\Exception $exception) {
-            try {
-                $edition = $this->findEditionByEditionFiles();
-            } catch (\Exception $exception) {
-                throw $exception;
-            }
-        }
-
-        return strtoupper($edition);
-    }
-
-    /**
-     * Find edition by directories of the editions in the vendor directory
-     *
-     * @return string
-     *
-     * @throws \Exception
-     */
-    private function findEditionByEditionFiles()
-    {
-        $facts = $this->getFacts();
-        $edition = '';
-        if (is_dir($facts->getEnterpriseEditionRootPath()) === true) {
-            $edition = static::ENTERPRISE;
-        } elseif (is_dir($facts->getProfessionalEditionRootPath()) === true) {
-            $edition = static::PROFESSIONAL;
-        } elseif (is_dir($facts->getCommunityEditionSourcePath()) === true) {
-            $edition = static::COMMUNITY;
-        }
-
-        if ($edition === '') {
-            throw new \Exception("Shop directory structure is not setup properly. Edition could not be detected");
-        }
-
-        return $edition;
-    }
-
-    /**
-     * @return Facts
-     */
-    private function getFacts()
-    {
-        return new Facts();
-    }
-
-    /**
-     * @return string
-     *
-     * @throws \Exception
-     */
-    private function findEditionByConfigFile()
-    {
-        $configFile = $this->getConfigFile();
-        $edition = $configFile->getVar('edition');
-
-        return $edition;
-    }
-
-    /**
-     * Safeguard for ConfigFile object.
-     *
-     * @return null|ConfigFile
-     */
-    protected function getConfigFile()
-    {
-        if (is_null($this->configFile)) {
-            $this->configFile = new ConfigFile();
-        }
-
-        return $this->configFile;
+        return $this->edition === Edition::Community;
     }
 }

@@ -3,7 +3,8 @@
     "description": "OXID eShop facts",
     "license": "proprietary",
     "require": {
-        "symfony/filesystem": "*"
+        "symfony/filesystem": "*",
+        "oxid-esales/oxideshop-ce": "dev-b-8.0.x"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6",

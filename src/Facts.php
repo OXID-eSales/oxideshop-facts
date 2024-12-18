@@ -22,6 +22,10 @@
 
 namespace OxidEsales\Facts;
 
+use OxidEsales\EshopCommunity\Internal\Framework\Configuration\DataObject\DatabaseConfiguration;
+use OxidEsales\EshopCommunity\Internal\Framework\Env\DotenvLoader;
+use OxidEsales\EshopCommunity\Internal\Framework\FileSystem\ProjectDirectoriesLocator;
+use OxidEsales\EshopCommunity\Internal\Framework\FileSystem\ProjectRootLocator;
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
 use ReturnTypeWillChange;
@@ -62,6 +66,8 @@ class Facts
 
     protected string $startPath;
 
+    private DatabaseConfiguration $dbConfig;
+
     /**
      * Facts constructor.
      *
@@ -72,6 +78,9 @@ class Facts
     {
         $this->startPath = $startPath;
         $this->configReader = $configFile;
+
+        $this->loadEnvironmentVariables();
+        $this->dbConfig = (new DatabaseConfiguration(getenv('OXID_DB_URL')));
     }
 
     /**
@@ -103,7 +112,7 @@ class Facts
      */
     public function getVendorPath()
     {
-        return Path::join($this->getShopRootPath(), 'vendor');
+        return (new ProjectDirectoriesLocator())->getVendorPath();
     }
 
     /**
@@ -236,7 +245,7 @@ class Facts
      */
     public function getDatabaseName()
     {
-        return $this->getConfigReader()->dbName;
+        return getenv('DB_NAME') ?: $this->dbConfig->getName();
     }
 
     /**
@@ -244,7 +253,7 @@ class Facts
      */
     public function getDatabaseUserName()
     {
-        return $this->getConfigReader()->dbUser;
+        return getenv('DB_USERNAME') ?: $this->dbConfig->getUser();
     }
 
     /**
@@ -252,7 +261,7 @@ class Facts
      */
     public function getDatabasePassword()
     {
-        return $this->getConfigReader()->dbPwd;
+        return getenv('DB_PASSWORD') ?: $this->dbConfig->getPass();
     }
 
     /**
@@ -260,7 +269,7 @@ class Facts
      */
     public function getDatabaseHost()
     {
-        return $this->getConfigReader()->dbHost;
+        return getenv('DB_HOST') ?: $this->dbConfig->getHost();
     }
 
     /**
@@ -268,15 +277,7 @@ class Facts
      */
     public function getDatabasePort()
     {
-        return $this->getConfigReader()->dbPort;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDatabaseDriver()
-    {
-        return $this->getConfigReader()->dbType;
+        return (int) getenv('DB_PORT') ?: $this->dbConfig->getPort();
     }
 
     /**
@@ -284,7 +285,7 @@ class Facts
      */
     public function getShopUrl()
     {
-        return $this->getConfigReader()->sShopURL;
+        return (string) getenv('OXID_SHOP_BASE_URL');
     }
 
     /**
@@ -340,5 +341,15 @@ class Facts
             Path::join($this->getVendorPath(), self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE);
 
         return is_dir($vendorCommunityEditionPath);
+    }
+
+    private function loadEnvironmentVariables(): void
+    {
+        (new DotenvLoader($this->getProjectRoot()))->loadEnvironmentVariables();
+    }
+
+    private function getProjectRoot(): string
+    {
+        return (new ProjectRootLocator())->getProjectRoot();
     }
 }
