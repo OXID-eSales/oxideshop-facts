@@ -1,30 +1,19 @@
 <?php
 
 /**
- * This file is part of OXID eSales OXID eShop Facts.
- *
- * OXID eSales OXID eShop Facts is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OXID eSales OXID eShop Facts is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with OXID eSales OXID eShop Facts. If not, see <http://www.gnu.org/licenses/>.
- *
- * @link          http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2017
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
  */
 
 namespace OxidEsales\Facts;
 
+use OxidEsales\EshopCommunity\Internal\Framework\Database\Configuration\DataObject\DatabaseConfiguration;
+use OxidEsales\EshopCommunity\Internal\Framework\Edition\Edition;
+use OxidEsales\EshopCommunity\Internal\Framework\Edition\EditionDirectoriesLocator;
+use OxidEsales\EshopCommunity\Internal\Framework\Env\DotenvLoader;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContext;
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
-use ReturnTypeWillChange;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -62,6 +51,12 @@ class Facts
 
     protected string $startPath;
 
+    private DatabaseConfiguration $databaseConfiguration;
+
+    private BasicContext $context;
+
+    private EditionSelector $editionSelector;
+
     /**
      * Facts constructor.
      *
@@ -72,6 +67,13 @@ class Facts
     {
         $this->startPath = $startPath;
         $this->configReader = $configFile;
+
+        $this->context = new BasicContext();
+
+        $this->loadEnvironmentVariables();
+
+        $this->databaseConfiguration = (new DatabaseConfiguration($this->context->getDatabaseUrl()));
+        $this->editionSelector = new EditionSelector();
     }
 
     /**
@@ -79,23 +81,7 @@ class Facts
      */
     public function getShopRootPath()
     {
-        $vendorPaths = [
-            '/vendor',
-            '/../vendor',
-            '/../../vendor',
-            '/../../../vendor',
-            '/../../../../vendor',
-        ];
-
-        $rootPath = '';
-        foreach ($vendorPaths as $vendorPath) {
-            if (file_exists(Path::join($this->startPath, $vendorPath))) {
-                $rootPath = Path::join($this->startPath, $vendorPath, '..');
-                break;
-            }
-        }
-
-        return $rootPath;
+        return $this->context->getShopRootPath();
     }
 
     /**
@@ -103,7 +89,7 @@ class Facts
      */
     public function getVendorPath()
     {
-        return Path::join($this->getShopRootPath(), 'vendor');
+        return $this->context->getVendorPath();
     }
 
     /**
@@ -111,7 +97,7 @@ class Facts
      */
     public function getSourcePath()
     {
-        return Path::join($this->getShopRootPath(), 'source');
+        return $this->context->getSourcePath();
     }
 
     /**
@@ -141,18 +127,7 @@ class Facts
      */
     public function getCommunityEditionRootPath()
     {
-        $communityEditionRootPath = $this->getShopRootPath();
-
-        if ($this->isProjectEshopInstallation()) {
-            $communityEditionRootPath =
-                Path::join(
-                    $this->getVendorPath(),
-                    self::COMPOSER_VENDOR_OXID_ESALES,
-                    self::COMPOSER_PACKAGE_OXIDESHOP_CE
-                );
-        }
-
-        return $communityEditionRootPath;
+        return (new EditionDirectoriesLocator)->getEditionRootPath(Edition::Community);
     }
 
     /**
@@ -162,10 +137,7 @@ class Facts
     {
         $vendorPath = $this->getVendorPath();
 
-        $professionalEditionSourcePath =
-            Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_PE);
-
-        return $professionalEditionSourcePath;
+        return Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_PE);
     }
 
     /**
@@ -175,10 +147,7 @@ class Facts
     {
         $vendorPath = $this->getVendorPath();
 
-        $enterpriseEditionSourcePath =
-            Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_EE);
-
-        return $enterpriseEditionSourcePath;
+        return Path::join($vendorPath, self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_EE);
     }
 
     /**
@@ -186,19 +155,15 @@ class Facts
      */
     public function getOutPath()
     {
-        return Path::join($this->getSourcePath(), 'out');
+        return $this->context->getOutPath();
     }
 
     /**
      * @return string Eshop edition as capital two letters code.
-     * @throws \Exception
      */
     public function getEdition()
     {
-        $editionSelector = new EditionSelector();
-        $edition = $editionSelector->getEdition();
-
-        return $edition;
+        return $this->editionSelector->getEdition();
     }
 
     /**
@@ -206,9 +171,7 @@ class Facts
      */
     public function isEnterprise()
     {
-        $editionSelector = new EditionSelector();
-
-        return $editionSelector->isEnterprise();
+        return $this->editionSelector->isEnterprise();
     }
 
     /**
@@ -216,9 +179,7 @@ class Facts
      */
     public function isProfessional()
     {
-        $editionSelector = new EditionSelector();
-
-        return $editionSelector->isProfessional();
+        return $this->editionSelector->isProfessional();
     }
 
     /**
@@ -226,9 +187,7 @@ class Facts
      */
     public function isCommunity()
     {
-        $editionSelector = new EditionSelector();
-
-        return $editionSelector->isCommunity();
+        return $this->editionSelector->isCommunity();
     }
 
     /**
@@ -236,7 +195,8 @@ class Facts
      */
     public function getDatabaseName()
     {
-        return $this->getConfigReader()->dbName;
+
+        return $this->databaseConfiguration->getName();
     }
 
     /**
@@ -244,7 +204,7 @@ class Facts
      */
     public function getDatabaseUserName()
     {
-        return $this->getConfigReader()->dbUser;
+        return $this->databaseConfiguration->getUser();
     }
 
     /**
@@ -252,7 +212,7 @@ class Facts
      */
     public function getDatabasePassword()
     {
-        return $this->getConfigReader()->dbPwd;
+        return $this->databaseConfiguration->getPass();
     }
 
     /**
@@ -260,7 +220,7 @@ class Facts
      */
     public function getDatabaseHost()
     {
-        return $this->getConfigReader()->dbHost;
+        return $this->databaseConfiguration->getHost();
     }
 
     /**
@@ -268,15 +228,7 @@ class Facts
      */
     public function getDatabasePort()
     {
-        return $this->getConfigReader()->dbPort;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDatabaseDriver()
-    {
-        return $this->getConfigReader()->dbType;
+        return $this->databaseConfiguration->getPort();
     }
 
     /**
@@ -284,34 +236,31 @@ class Facts
      */
     public function getShopUrl()
     {
-        return $this->getConfigReader()->sShopURL;
+        return $this->context->getShopBaseUrl();
     }
 
     /**
      * @return array
      *
-     * @deprecated this method will be remove in next major version and it will moved to doctrine-migration-wrapper component
+     * @deprecated this method will be remove in next major version
+     * and it will moved to doctrine-migration-wrapper component
      */
     public function getMigrationPaths(): array
     {
         $editionSelector = new EditionSelector();
 
         $migrationPaths = [
-            'ce' => $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH) . '/migration/migrations.yml',
+            'ce' => $this->getSourcePath() . '/migration/migrations.yml',
+            'pr' => $this->getSourcePath() . '/migration/migrations.yml',
         ];
 
         if ($editionSelector->isProfessional() || $editionSelector->isEnterprise()) {
-            $migrationPaths['pe'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-pe/migration/migrations.yml';
+            $migrationPaths['pe'] = $this->getProfessionalEditionRootPath() . '/migration/migrations.yml';
         }
 
         if ($editionSelector->isEnterprise()) {
-            $migrationPaths['ee'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_VENDOR_PATH)
-                . '/' . self::COMPOSER_VENDOR_OXID_ESALES . '/oxideshop-ee/migration/migrations.yml';
+            $migrationPaths['ee'] = $this->getEnterpriseEditionRootPath() . '/migration/migrations.yml';
         }
-
-        $migrationPaths['pr'] = $this->getConfigReader()->getVar(ConfigFile::PARAMETER_SOURCE_PATH)
-            . '/migration/project_migrations.yml';
 
         return $migrationPaths;
     }
@@ -337,8 +286,22 @@ class Facts
     private function isProjectEshopInstallation()
     {
         $vendorCommunityEditionPath =
-            Path::join($this->getVendorPath(), self::COMPOSER_VENDOR_OXID_ESALES, self::COMPOSER_PACKAGE_OXIDESHOP_CE);
+            Path::join(
+                $this->getVendorPath(),
+                self::COMPOSER_VENDOR_OXID_ESALES,
+                self::COMPOSER_PACKAGE_OXIDESHOP_CE
+            );
 
         return is_dir($vendorCommunityEditionPath);
+    }
+
+    private function loadEnvironmentVariables(): void
+    {
+        (new DotenvLoader($this->getProjectRoot()))->loadEnvironmentVariables();
+    }
+
+    private function getProjectRoot(): string
+    {
+        return $this->context->getShopRootPath();
     }
 }

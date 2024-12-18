@@ -9,95 +9,96 @@ declare(strict_types=1);
 
 namespace OxidEsales\Facts\Tests\Unit;
 
-use org\bovigo\vfs\vfsStream;
-use OxidEsales\Facts\Config\ConfigFile;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\Configuration\DataObject\DatabaseConfiguration;
+use OxidEsales\EshopCommunity\Internal\Framework\Edition\Edition;
+use OxidEsales\EshopCommunity\Internal\Framework\Edition\EditionDirectoriesLocator;
+use OxidEsales\EshopCommunity\Internal\Framework\Edition\EditionPaths;
+use OxidEsales\EshopCommunity\Internal\Framework\FileSystem\ProjectDirectoriesLocator;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContext;
+use OxidEsales\EshopCommunity\Internal\Transition\Utility\BasicContextInterface;
 use OxidEsales\Facts\Facts;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Path;
 
-class FactsTest extends TestCase
+final class FactsTest extends TestCase
 {
+    private Facts $facts;
+    private BasicContextInterface $context;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->facts = new Facts();
+        $this->context = new BasicContext();
+    }
+
     public function testGetShopRootPath(): void
     {
-        $facts = $this->buildFacts();
-
-        $expectedRoot = vfsStream::url('root/oxideshop_ce');
-        $this->assertSame($expectedRoot, $facts->getShopRootPath());
+        $expectedRoot = $this->context->getShopRootPath();
+        $this->assertSame($expectedRoot, $this->facts->getShopRootPath());
     }
 
     public function testGetVendorPath(): void
     {
-        $facts = $this->buildFacts();
-
-        $expectedVendor = vfsStream::url('root/oxideshop_ce/vendor');
-        $this->assertEquals($expectedVendor, $facts->getVendorPath());
+        $expectedVendor = $this->context->getVendorPath();
+        $this->assertEquals($expectedVendor, $this->facts->getVendorPath());
     }
 
     public function testGetSourcePath(): void
     {
-        $facts = $this->buildFacts();
-
-        $expectedSource = $this->getShopSourcePath();
-        $this->assertEquals($expectedSource, $facts->getSourcePath());
+        $expectedSource = $this->context->getSourcePath();
+        $this->assertEquals($expectedSource, $this->facts->getSourcePath());
     }
 
     public function testGetCommunityEditionSourcePathNormalInstallation(): void
     {
-        $facts = $this->buildFacts();
-
-        $this->assertEquals($this->getShopSourcePath(), $facts->getCommunityEditionSourcePath());
+        $this->assertEquals(
+            $this->context->getEditionSourcePath(Edition::Community),
+            $this->facts->getCommunityEditionSourcePath()
+        );
     }
 
-    public function testGetCommunityEditionSourcePathProjectInstallation(): void
+    public function testGetProfessionalEditionSourcePathNormalInstallation(): void
     {
-        $facts = $this->buildFacts(true);
+        $projectDirectoriesLocator = new ProjectDirectoriesLocator();
 
-        $this->assertEquals($this->getProjectShopSourcePath(), $facts->getCommunityEditionSourcePath());
+        $professionalEdition = Edition::Professional;
+        $path = Path::join(
+            $projectDirectoriesLocator->getVendorPath(),
+            EditionPaths::from($professionalEdition->value)->getVendorFolderName(),
+            EditionPaths::from($professionalEdition->value)->getProjectFolderName(),
+        );
+
+        $this->assertEquals(
+            $path,
+            $this->facts->getProfessionalEditionRootPath()
+        );
     }
 
-    private function buildFacts($isProjectInstallation = false): Facts
+    public function testGetCommunityEditionRootPathNormalInstallation(): void
     {
+        $path = (new EditionDirectoriesLocator())->getEditionRootPath(Edition::Community);
 
-        $vendorOxidesaleDirectory = [
-            'oxideshop-facts' => [
-                'bin' => [],
-                'src' => []
-            ]
-        ];
-        if ($isProjectInstallation) {
-            $vendorOxidesaleDirectory['oxideshop-ce'] = [];
-        }
-
-        $structure = [
-            'oxideshop_ce' => [
-                'source' => [
-                    'Core' => [],
-                    'Application' => []
-                ],
-                'vendor' => [
-                    'bin' => [],
-                    'oxid-esales' => $vendorOxidesaleDirectory
-                ]
-            ],
-            'vendor' => []
-        ];
-
-        vfsStream::setup('root', null, $structure);
-        $root = vfsStream::url('root');
-
-        $__DIR__stub = $root . '/oxideshop_ce/vendor/oxid-esales/oxideshop-facts/src';
-
-        $configFile = $this->createMock(ConfigFile::class);
-
-        return new Facts($__DIR__stub, $configFile);
+        $this->assertEquals(
+            $path,
+            $this->facts->getCommunityEditionRootPath()
+        );
     }
 
-    private function getShopSourcePath(): string
+    public function testGetOutPath(): void
     {
-        return vfsStream::url('root/oxideshop_ce/source');
+        $this->assertEquals(
+            $this->context->getOutPath(),
+            $this->facts->getOutPath()
+        );
     }
 
-    private function getProjectShopSourcePath(): string
+    public function testGetEdition(): void
     {
-        return vfsStream::url('root/oxideshop_ce/vendor/oxid-esales/oxideshop-ce/source');
+        $this->assertEquals(
+            $this->context->getEdition()->value,
+            $this->facts->getEdition()
+        );
     }
 }

@@ -5,6 +5,9 @@
 ### Added
 - PHPUnit v11 support
 
+### Changed
+- The functionality of the `Facts` component now depends on the Core Engine (CE) components.
+
 ### Removed
 - PHPUnit v10 support
 
