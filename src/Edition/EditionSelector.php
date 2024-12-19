@@ -35,6 +35,12 @@ use OxidEsales\EshopCommunity\Internal\Framework\Edition\Edition;
 #[\AllowDynamicProperties]
 class EditionSelector
 {
+    const ENTERPRISE = 'EE';
+
+    const PROFESSIONAL = 'PE';
+
+    const COMMUNITY = 'CE';
+
     private Edition $edition;
 
     public function __construct()
