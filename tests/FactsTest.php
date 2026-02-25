@@ -86,7 +86,7 @@ class FactsTest extends TestCase
 
         $__DIR__stub = $root . '/oxideshop_ce/vendor/oxid-esales/oxideshop-facts/src';
 
-        $configFile = $this->createMock(ConfigFile::class);
+        $configFile = $this->createStub(ConfigFile::class);
 
         return new Facts($__DIR__stub, $configFile);
     }
