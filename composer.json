@@ -7,8 +7,7 @@
         "oxid-esales/oxideshop-ce": "dev-b-8.0.x"
     },
     "require-dev": {
-        "mikey179/vfsstream": "^1.6",
-        "phpunit/phpunit": "^11.4"
+        "mikey179/vfsstream": "^1.6"
     },
     "autoload": {
         "psr-4": {
