@@ -59,6 +59,7 @@ class Facts
     protected $configReader = null;
 
     protected string $startPath;
+    private string $shopRootPath;
 
     /**
      * Facts constructor.
@@ -77,23 +78,25 @@ class Facts
      */
     public function getShopRootPath()
     {
-        $vendorPaths = [
-            '/vendor',
-            '/../vendor',
-            '/../../vendor',
-            '/../../../vendor',
-            '/../../../../vendor',
-        ];
+        if (!isset($this->shopRootPath)) {
+            $vendorPaths = [
+                '/vendor',
+                '/../vendor',
+                '/../../vendor',
+                '/../../../vendor',
+                '/../../../../vendor',
+            ];
 
-        $rootPath = '';
-        foreach ($vendorPaths as $vendorPath) {
-            if (file_exists(Path::join($this->startPath, $vendorPath))) {
-                $rootPath = Path::join($this->startPath, $vendorPath, '..');
-                break;
+            $this->shopRootPath = '';
+            foreach ($vendorPaths as $vendorPath) {
+                if (file_exists(Path::join($this->startPath, $vendorPath))) {
+                    $this->shopRootPath = Path::join($this->startPath, $vendorPath, '..');
+                    break;
+                }
             }
         }
 
-        return $rootPath;
+        return $this->shopRootPath;
     }
 
     /**
