@@ -12,7 +12,7 @@ namespace OxidEsales\Facts\Tests\Unit;
 use OxidEsales\Facts\Config\ConfigFile;
 use OxidEsales\Facts\Edition\EditionSelector;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 final class EditionSelectorTest extends TestCase
@@ -105,8 +105,11 @@ final class EditionSelectorTest extends TestCase
         $this->assertTrue($editionSelector->isEnterprise());
     }
 
-    private function getConfigStub($edition): MockObject
+    private function getConfigStub($edition): Stub
     {
-        return $this->createConfiguredMock(ConfigFile::class, ['getVar' => $edition]);
+        $stub = $this->createStub(ConfigFile::class);
+        $stub->method('getVar')->willReturn($edition);
+
+        return $stub;
     }
 }
