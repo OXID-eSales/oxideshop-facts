@@ -1,6 +1,6 @@
 # Change Log for OXID eShop facts
 
-## v4.4.0 - unreleased
+## v4.4.0 - 2026-04-08
 
 ### Changed
 - Avoid repeated resolution of shop root path
